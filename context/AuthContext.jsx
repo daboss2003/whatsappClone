@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { auth, db } from '../firebaseConfig';
-import { onAuthStateChanged } from "firebase/auth";
 import { AuthContext } from "./context";
-import { collection, onSnapshot, doc } from "firebase/firestore";
 import { useRouter } from "expo-router";
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import { Alert } from "react-native";
+
+
 
 
 
@@ -19,7 +21,7 @@ export default function AuthProvider({ children }) {
   
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, initializeUser);
+        const unsubscribe = auth().onAuthStateChanged(initializeUser);
         return () => {
             unsubscribe();
         }
@@ -41,9 +43,8 @@ export default function AuthProvider({ children }) {
     useEffect(() => {
         if (!isLoggedIn) return
         setIsloading(true)
-        const userCollection = collection(db, 'users');
-        const docRef = doc(userCollection, currentUser.uid)
-        const subscribe = onSnapshot(docRef, (snapshot) => {
+        const usersCollection = firestore().collection('Users').doc(currentUser.uid);
+        const subscribe = usersCollection.onSnapshot((snapshot) => {
             if (snapshot.exists()) {
                 setIsloading(false)
                 setuserInfo(snapshot.data())
@@ -52,6 +53,8 @@ export default function AuthProvider({ children }) {
                 setIsloading(false)
                 router.navigate('/(setup)')
             }
+        }, (error) => {
+            Alert.alert('Authentication Error', error.message)
         })
 
         return subscribe

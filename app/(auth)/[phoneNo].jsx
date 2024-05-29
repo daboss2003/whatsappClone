@@ -14,9 +14,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MyButton from '../../components/MyButton'
 import { MaterialIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar'
-import { auth } from '../../firebaseConfig'
-import { PhoneAuthProvider, signInWithCredential } from 'firebase/auth';
-import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
+import auth from '@react-native-firebase/auth'
 
 
 
@@ -28,7 +26,7 @@ export default function VerifyOTP() {
   const theme = useColorScheme() ?? 'light'
   const [openModal, setOpenModal] = useState(false)
   const [value, setValue] = useState('');
-  const [verificationID, setVerificationID] = useState('');
+  const [verification, setVerification] = useState(null);
   const [isLoding, setIsloading] = useState(false)
   const recapchaVerifier = useRef(null);
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
@@ -51,9 +49,8 @@ export default function VerifyOTP() {
   async function sendCode() {
     try {
       setIsloading(true)
-      const phoneProvider = new PhoneAuthProvider(auth);
-      const verification = await phoneProvider.verifyPhoneNumber(phoneNo, recapchaVerifier.current);
-      setVerificationID(verification);
+      const confirmation = await auth().signInWithPhoneNumber(phoneNo);
+      setVerification(confirmation);
       Alert.alert('Success', 'Verification code has been sent to your phone.')
     }
     catch(error){
@@ -68,8 +65,7 @@ export default function VerifyOTP() {
   async function verifyCode() {
     try {
       setIsloading(true)
-      const credential = PhoneAuthProvider.credential(verificationID, value);
-      await signInWithCredential(auth, credential);
+      await verification.confirm(value)
       Alert.alert('Success','Verification completed')
     }
     catch(err) {
