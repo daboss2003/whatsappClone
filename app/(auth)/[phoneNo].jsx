@@ -85,7 +85,6 @@ export default function VerifyOTP() {
  
   return (
     <View>
-      <FirebaseRecaptchaVerifierModal ref={recapchaVerifier} firebaseConfig={auth.app.options} />
       <Text type={'regular'} style={{fontSize: 15, textAlign: 'center', letterSpacing: 1,lineHeight: 27}}>
        Waiting to automatically detect an SMS sent to
         <Text>

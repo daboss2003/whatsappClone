@@ -32,7 +32,7 @@ export default function Wellcome() {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 28,
+    fontSize: 25,
     letterSpacing: 2,
     marginBottom : 8
   },
@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   image: {
-    width: 400,
-    height: 400
+    width: '40%',
+    height: '40%'
   },
   text: {
     textAlign: 'center',
