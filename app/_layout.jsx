@@ -7,6 +7,7 @@ import AuthProvider from '../context/AuthContext'
 import RootLayoutNav from './RootLayoutNav';
 import { MenuProvider } from 'react-native-popup-menu';
 import firebase from '@react-native-firebase/app'
+import 'expo-dev-client'
 
 
 export {

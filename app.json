@@ -32,7 +32,7 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-   "plugins": [
+    "plugins": [
       "@react-native-firebase/app",
       "@react-native-firebase/auth",
       "expo-router",
@@ -45,7 +45,6 @@
         }
       ]
     ],
-
     "extra": {
       "router": {
         "origin": false
@@ -53,6 +52,12 @@
       "eas": {
         "projectId": "d649c5a6-4ddf-4f6e-bfb3-32ebd73d2c32"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/d649c5a6-4ddf-4f6e-bfb3-32ebd73d2c32"
     }
   }
 }
