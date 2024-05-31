@@ -45,13 +45,13 @@ export default function AuthProvider({ children }) {
         setIsloading(true)
         const usersCollection = firestore().collection('Users').doc(currentUser.uid);
         const subscribe = usersCollection.onSnapshot((snapshot) => {
-            if (snapshot.exists()) {
+            if (snapshot.exists) {
                 setIsloading(false)
                 setuserInfo(snapshot.data())
             }
             else {
                 setIsloading(false)
-                router.navigate('/(setup)')
+                router.replace('/(setup)')
             }
         }, (error) => {
             Alert.alert('Authentication Error', error.message)

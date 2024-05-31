@@ -46,8 +46,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   image: {
-    width: '65%',
-    height: '30%'
+    width: '90%',
+    height: '40%',
+     marginBottom : 8
   },
   text: {
     textAlign: 'center',

@@ -2,37 +2,39 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { Stack } from 'expo-router';
 import {useAuth} from '../hooks/useAuth'
 
-import { ActivityIndicator, useColorScheme } from 'react-native';
-import { Text, View } from '../components/Themed';
+import {  useColorScheme } from 'react-native';
+
 
 
 export default function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  const { currentUser, isLoggedIn, isLoading } = useAuth();
+  const { currentUser, isLoggedIn, loading } = useAuth();
 
-  if (isLoading) {
+  if (loading) {
     return (
-    <View style={{justifyContent: 'center'}}>
-      <ActivityIndicator size={60} style={{marginBottom: 20}} />
-      <Text style={{fontSize: 18, textAlign: 'center'}}>Loading...</Text>
-    </View>
+    <Stack>
+      <Stack.Screen name='loader' options={{ headerShown: false}}/>
+    </Stack>
     )
   }
   if (currentUser === null || !isLoggedIn) {
       return (
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <Stack>
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false}} />
           </Stack>
         </ThemeProvider>
   );
     }
     
-  return (
+  if (!loading) {
+    return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(app)" options={{ headerShown: false }} />
+        <Stack.Screen name="(setup)" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );
+  }
 }

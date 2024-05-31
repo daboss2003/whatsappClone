@@ -134,13 +134,13 @@ export default function VerifyOTP() {
             </TouchableOpacity>
             <DefaultView style={{flex: 1, alignItems: 'center', padding: 15,  width: '100%' }}>
               <DefaultView
-              style={{width: 70, height: 70, borderRadius: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: brandColors.green[theme], marginBottom: 25}}>
+              style={{width: 70, height: 70, borderRadius: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: brandColors.green[theme], marginBottom: 20}}>
                 <MaterialCommunityIcons name="message-processing" size={26} color="#fff" />
               </DefaultView>
-              <Text style={{ fontSize: 25, textAlign: 'center', lineHeight: 30, marginBottom: 20 }}>
+              <Text style={{ fontSize: 22, textAlign: 'center', lineHeight: 32, marginBottom: 15 }}>
                 Didn't receive a verification code?
               </Text>
-              <Text type={'regular'} style={{ fontSize: 17, textAlign: 'center', lineHeight:  27, marginBottom: 20 }}>
+              <Text type={'regular'} style={{ fontSize: 16, textAlign: 'center', lineHeight:  25, marginBottom: 15 }}>
                 Please check your SMS messages before requesting another code.
               </Text>
               <MyButton full={true} onPress={sendCode}>

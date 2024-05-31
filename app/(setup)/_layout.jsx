@@ -22,7 +22,7 @@ export default function _layout() {
           <MenuTrigger>
             <Entypo name="dots-three-vertical" size={24} color={brandColors[theme]} />
           </MenuTrigger>
-          <MenuOptions optionsContainerStyle={{backgroundColor: theme === 'light' ? '#fff' : '#555', borderRadius: 10, shadowOffset: 10, shadowColor:  Colours[theme].background}}>
+          <MenuOptions optionsContainerStyle={{backgroundColor: theme === 'light' ? '#fff' : '#555', borderRadius: 10, shadowOffset: 10, shadowColor: Colours[theme].background}}>
             <MenuOption children={<ExternalLink href={'https://www.whatsapp.com'} style={{fontSize: 20, color: brandColors[theme], fontWeight: 'bold', padding: 10}}>Help</ExternalLink>} />
           </MenuOptions>
         </Menu>
@@ -34,12 +34,10 @@ export default function _layout() {
       headerTitleAlign: 'center',
       headerTitleStyle: { color: theme === 'light' ? brandColors.green.light : brandColors[theme], fontFamily: 'HelveticaBold' },
     }}>
-      <Stack.Screen name='index' options={{ title: '' }} />
-      <Stack.Screen name='sendOTP' options={{ title: 'Enter your phone number' }} />
-      <Stack.Screen name='modal' options={{ title: '', presentation: 'transparentModal', headerShown: false }} />
-      <Stack.Screen name='[phoneNo]' options={{ title: `Verify your number`, headerBackVisible: false}}  />
+      <Stack.Screen name='index' options={{ title: 'Profile info' }} />
     </Stack>
   )
 }
+
 
 

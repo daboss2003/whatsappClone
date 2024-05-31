@@ -17,12 +17,12 @@ export default function Modal() {
     <SafeAreaView style={{flex: 1, paddingHorizontal: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0, 0.4)'}}>
       <View style={{...styles.container, backgroundColor: theme === 'dark' ?  brandColors.primary.light : '#fff'}}>
         <Text type={'regular'} style={{fontSize: 17, marginBottom: 10}}>Is this the correct number?</Text>
-        <Text style={{fontSize: 20, marginBottom: 15}}>{`+${code} ${phone}`}</Text>
+        <Text style={{fontSize: 20, marginBottom: 15}}>{`${code} ${phone}`}</Text>
         <View style={{flexDirection: 'row', gap: 10, justifyContent: 'flex-end'}}>
           <TouchableOpacity onPress={ router.back } style={{padding: 15}}>
             <DefaultText style={{color: brandColors.green[theme],fontSize: 17,fontFamily: 'HelveticaBold'}}>Edit</DefaultText>
           </TouchableOpacity>
-          <TouchableOpacity style={{padding: 15}} onPress={() => router.replace({pathname: `/(auth)/[phoneNo]`, params: {phoneNo: `+${code}${phone}`}})}>
+          <TouchableOpacity style={{padding: 15}} onPress={() => router.replace({pathname: `/(auth)/[phoneNo]`, params: {phoneNo: `${code}${phone}`}})}>
             <DefaultText style={{color: brandColors.green[theme],fontSize: 17, fontFamily: 'HelveticaBold'}}>Yes</DefaultText>
           </TouchableOpacity>
         </View>

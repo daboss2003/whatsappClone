@@ -1,12 +1,11 @@
 import { View, Text } from '../../components/Themed'
 import React, { useState } from 'react'
-import { brandColors } from '../../constants/Colors'
+import Colors ,{ brandColors } from '../../constants/Colors'
 import ExternalLink from '../../components/ExternalLink'
 import { useColorScheme, KeyboardAvoidingView, View as DefaultView, StyleSheet, TouchableOpacity , TextInput, Text as DefaultText, Keyboard} from 'react-native'
 import MyButton from '../../components/MyButton'
-import CountryPicker from 'react-native-country-picker-modal'
+import { CountryPicker } from 'react-native-country-codes-picker'
 import Octicons from '@expo/vector-icons/Octicons';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'expo-router'
@@ -21,21 +20,24 @@ export default function SendOTP() {
   const theme = useColorScheme() ?? 'light'
   const [modalOpen, setModalOpen] = useState(false);
   const [country, setCountry] = useState({
-    callingCode: '234',
-    cca2: "NG",
+    dial_code: '+234',
+    code: "NG",
     name: "Nigeria",
   });
 const [inputBorderWidth, setInputBorderWidth] = useState(1)
  
 
   function onSelect(country) {
-    setCountry(country)
+    const dial_code = country.dial_code
+    const name = country.name.en
+    const code = country.code
+    setCountry({dial_code, name, code})
     setModalOpen(false);
   }
 
   function submitPhoneNo(phone) {
     Keyboard.dismiss()
-    router.push({pathname: '/modal', params: { phone: phone.phoneNo , code: country.callingCode }})
+    router.push({pathname: '/modal', params: { phone: phone.phoneNo , code: country.dial_code }})
   }
   return (
     <View>
@@ -56,8 +58,7 @@ const [inputBorderWidth, setInputBorderWidth] = useState(1)
             <KeyboardAvoidingView style={{flex: 1, width: '100%', alignItems: 'center'}}>
               <DefaultView style={styles.inputContainer}>
                 <DefaultView style={{ ...styles.leftContainer, borderColor: brandColors.green[theme] }}>
-                  <AntDesign name="plus" size={15} color={brandColors[theme]} />
-                  <Text type={'regular'} style={{fontSize: 18}}>{ country.callingCode}</Text>
+                  <Text type={'regular'} style={{fontSize: 18}}>{ country.dial_code}</Text>
                 </DefaultView>
                 <TextInput
                   onChangeText={handleChange('phoneNo')}
@@ -67,10 +68,11 @@ const [inputBorderWidth, setInputBorderWidth] = useState(1)
                     }
                   }
                   value={values.phoneNo}
-                  style={{ ...styles.input, borderColor: brandColors.green[theme],  borderBottomWidth: inputBorderWidth }}
+                  style={{ ...styles.input, borderColor: brandColors.green[theme],  borderBottomWidth: inputBorderWidth, color: brandColors[theme] }}
                   placeholder='Phone number'
-                keyboardType="phone-pad"
-                onFocus={() => setInputBorderWidth(2)}
+                  keyboardType="phone-pad"
+                  onFocus={() => setInputBorderWidth(2)}
+                  cursorColor={brandColors.green[theme]}
                 />
             </DefaultView>
             {errors.phoneNo && touched.phoneNo ? 
@@ -83,15 +85,36 @@ const [inputBorderWidth, setInputBorderWidth] = useState(1)
           )}
         </Formik>
       <CountryPicker
-        visible={modalOpen}
-        onSelect={onSelect}
-        theme={theme}
-        countryCode={country.cca2}
-        withFlag={true}
-        withEmoji={true}
-        withFilter={true}
-        withFlagButton={false}
-        onClose={() => setModalOpen(false)}
+        show={modalOpen}
+        enableModalAvoiding={true}
+        pickerButtonOnPress={(item) => onSelect(item)}
+        onBackdropPress={() => setModalOpen(false)}
+        lang={'en'}
+        style={{
+          modal: {
+             backgroundColor: theme === 'light' ? '#fff' : '#444',
+            height: '80%'
+          },
+          textInput: {
+            color: Colors[theme].text,
+             backgroundColor: theme === 'light' ? '#fff' : '#333',
+          },
+          dialCode: {
+            color: Colors[theme].text
+          },
+          countryName: {
+            color: Colors[theme].text
+          },
+          flag: {
+            color: Colors[theme].text
+          },
+          searchMessageText: {
+            color: Colors[theme].text
+          },
+          countryButtonStyles: {
+            backgroundColor: Colors[theme].background,
+        },
+        }}
       />
     </View>
   )
