@@ -1,6 +1,6 @@
 import { View, Text } from '../../components/Themed'
 import React, { useState } from 'react'
-import Colors ,{ brandColors } from '../../constants/Colors'
+import Colors ,{ FontSize, brandColors } from '../../constants/Colors'
 import ExternalLink from '../../components/ExternalLink'
 import { useColorScheme, KeyboardAvoidingView, View as DefaultView, StyleSheet, TouchableOpacity , TextInput, Text as DefaultText, Keyboard} from 'react-native'
 import MyButton from '../../components/MyButton'
@@ -41,7 +41,7 @@ const [inputBorderWidth, setInputBorderWidth] = useState(1)
   }
   return (
     <View>
-      <Text type={'regular'} style={styles.text}>
+      <Text type={'regular'} style={styles.text} full={true}>
           WhatsApp will need verify your phone number. Carrier charges may apply.
           <ExternalLink href={'https://www.whatsapp.com'} children={" What's my number?"} style={{ color: brandColors.blueColor }} />     
       </Text>
@@ -76,7 +76,7 @@ const [inputBorderWidth, setInputBorderWidth] = useState(1)
                 />
             </DefaultView>
             {errors.phoneNo && touched.phoneNo ? 
-              <DefaultText style={{fontSize: 16, color: 'red', marginVertical: 10}}>{ errors.phoneNo}</DefaultText>
+              <DefaultText style={{fontSize: FontSize.regular, color: 'red', marginVertical: 10}}>{ errors.phoneNo}</DefaultText>
             : ''}
               
               <DefaultView style={{flex: 1}}></DefaultView>
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     lineHeight: 27,
      letterSpacing: 1,
     textAlign: 'center',
-    fontSize: 16
+    fontSize: FontSize.regular
   }, 
   dropDown: {
     width: '75%',
@@ -137,12 +137,12 @@ const styles = StyleSheet.create({
   },
   dropDownText: {
     flexBasis: '95%',
-    fontSize: 18,
+    fontSize: FontSize.heading,
     textAlign: 'center'
   },
   input: {
     flexBasis: '62%',
-    fontSize: 18,
+    fontSize: FontSize.heading,
     paddingBottom: 3
   },
   inputContainer: {

@@ -1,7 +1,7 @@
 import { StyleSheet, useColorScheme, TouchableOpacity, Image, View as DefaultView, Text as DefaultText } from 'react-native';
 import { Text, View } from '../../components/Themed';
 import Entypo from '@expo/vector-icons/Entypo';
-import { brandColors } from '../../constants/Colors';
+import { FontSize, brandColors } from '../../constants/Colors';
 import ExternalLink from '../../components/ExternalLink';
 import Feather from '@expo/vector-icons/Feather';
 import MyButton from '../../components/MyButton';
@@ -14,14 +14,14 @@ export default function Wellcome() {
     <View>
       <Image source={require('../../assets/images/welcome.png')} style={styles.image} />
       <Text style={styles.title}>Welcome to WhatsApp</Text>
-      <Text type={'regular'} style={styles.text}>Read our
+      <Text type={'regular'} full={true} style={styles.text}>Read our
         <ExternalLink href={'https://www.whatsapp.com'} children={' Privacy Policy. '} style={{ color: brandColors.blueColor }} />
         Tap "Agree and continue" to accept the 
         <ExternalLink href={'https://www.whatsapp.com'} children={' Terms of Service.'} style={{ color: brandColors.blueColor }} />
       </Text>
       <TouchableOpacity style={{...styles.dropdown,  backgroundColor: theme === 'light' ? '#EaF0EF' : ''}}>
         <Feather name="globe" size={24} color={brandColors.green[theme]} />
-        <DefaultText style={{ color: brandColors.green[theme], fontSize: 17, fontFamily: 'Helvetica' }}>English</DefaultText>
+        <DefaultText style={{ color: brandColors.green[theme], fontSize: FontSize.regular, fontFamily: 'Helvetica' }}>English</DefaultText>
         <Entypo name="chevron-small-down" size={28} color={brandColors.green[theme]} />
       </TouchableOpacity>
       <DefaultView style={{flex: 1}}></DefaultView>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     lineHeight: 26,
-    fontSize: 16,
+    fontSize: FontSize.regular,
   },
  
 });

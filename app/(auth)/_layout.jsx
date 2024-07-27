@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Stack } from 'expo-router'
 import Colours,{ brandColors }  from '../../constants/Colors';
 import { useColorScheme } from 'react-native';
@@ -15,15 +15,16 @@ import ExternalLink from '../../components/ExternalLink';
 
 export default function _layout() {
   const theme = useColorScheme() ?? 'light';
+  const menuRef = useRef(null)
   return (
     <Stack screenOptions={{
       headerRight: () => (
-        <Menu>
+        <Menu onSelect={() => menuRef.current.close()} ref={menuRef}>
           <MenuTrigger>
-            <Entypo name="dots-three-vertical" size={24} color={brandColors[theme]} />
+            <Entypo name="dots-three-vertical" size={22} color={brandColors[theme]} />
           </MenuTrigger>
-          <MenuOptions optionsContainerStyle={{backgroundColor: theme === 'light' ? '#fff' : '#555', borderRadius: 10, shadowOffset: 10, shadowColor:  Colours[theme].background}}>
-            <MenuOption children={<ExternalLink href={'https://www.whatsapp.com'} style={{fontSize: 20, color: brandColors[theme], fontWeight: 'bold', padding: 10}}>Help</ExternalLink>} />
+          <MenuOptions optionsContainerStyle={{backgroundColor: theme === 'light' ? '#fff' : '#343F45', borderRadius: 10, shadowOffset: 10, shadowColor:  Colours[theme].background, marginTop: 20}}>
+            <MenuOption children={<ExternalLink href={'https://www.whatsapp.com'} style={{fontSize: 20, color: brandColors[theme], fontFamily: 'HelveticaBold', padding: 10}}>Help</ExternalLink>} />
           </MenuOptions>
         </Menu>
       ),
@@ -33,6 +34,11 @@ export default function _layout() {
       headerShadowVisible: false,
       headerTitleAlign: 'center',
       headerTitleStyle: { color: theme === 'light' ? brandColors.green.light : brandColors[theme], fontFamily: 'HelveticaBold' },
+      animationTypeForReplace: "push",
+      customAnimationOnGesture: true,
+      animation: "slide_from_right",
+      fullScreenGestureEnabled: true,
+      gestureEnabled: true,
     }}>
       <Stack.Screen name='index' options={{ title: '' }} />
       <Stack.Screen name='sendOTP' options={{ title: 'Enter your phone number' }} />

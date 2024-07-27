@@ -1,52 +1,72 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import 'react-native-gesture-handler';
+import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import AuthProvider from '../context/AuthContext'
 import RootLayoutNav from './RootLayoutNav';
 import { MenuProvider } from 'react-native-popup-menu';
 import 'expo-dev-client'
-
-
-export {
-  ErrorBoundary,
-} from 'expo-router';
-
-SplashScreen.preventAutoHideAsync();
+import { addEventListener } from "@react-native-community/netinfo";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import NotificationPopup from 'react-native-push-notification-popup';
+import { useRef } from 'react';
+import { Dimensions, Keyboard, LayoutAnimation, Platform, UIManager, View } from 'react-native';
 
 
 
+const { height } = Dimensions.get('window')
+
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true)
+}
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    Helvetica: require('../assets/fonts/Helvetica.ttf'),
-    HelveticaBold: require('../assets/fonts/Helvetica-Bold.ttf'),
-    ...FontAwesome.font,
-  });
 
+  const [connected, setConnected] = useState(false)
+  const popupRef = useRef(null)
+  const [keyboardVisible, setKeyboardVisisble] = useState(false)
+  
   useEffect(() => {
-    if (error) throw error;
-  }, [error]);
-
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    const useConnection = addEventListener(state => {
+      setConnected(state.isConnected)
+    });
+    return () => {
+      useConnection()
     }
-  }, [loaded]);
+  }, []);
+
+  useEffect(() => {
+    const keyboardShowEvent = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisisble(true)
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
+    });
+
+    const keyboardDidHideEvent = Keyboard.addListener('keyboardDidHide', () => {
+       setKeyboardVisisble(false)
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+    });
 
 
-  if (!loaded) {
-    return null;
-  }
+    return () => {
+      keyboardDidHideEvent.remove()
+      keyboardShowEvent.remove()
+    }
+  }, []);
+
 
   return (
-    <AuthProvider>
+    <View style={{height: keyboardVisible ? (70 / 100) * height : height, flex: 1}}>
+      <AuthProvider connected={connected}>
       <MenuProvider>
-        <RootLayoutNav />
+        <GestureHandlerRootView>
+          <RootLayoutNav popup={popupRef} />
+        </GestureHandlerRootView>
       </MenuProvider>
-    </AuthProvider>
+       <NotificationPopup ref={popupRef} />
+      </AuthProvider>
+     </View>
   );
 }
+
+
+
 

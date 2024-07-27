@@ -4,7 +4,7 @@ import { Text } from '../../components/Themed'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { View , TouchableOpacity, StyleSheet, useColorScheme, Text as DefaultText } from 'react-native'
-import { brandColors } from '../../constants/Colors'
+import { FontSize, brandColors } from '../../constants/Colors'
 
 
 
@@ -16,14 +16,14 @@ export default function Modal() {
   return (
     <SafeAreaView style={{flex: 1, paddingHorizontal: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0, 0.4)'}}>
       <View style={{...styles.container, backgroundColor: theme === 'dark' ?  brandColors.primary.light : '#fff'}}>
-        <Text type={'regular'} style={{fontSize: 17, marginBottom: 10}}>Is this the correct number?</Text>
+        <Text type={'regular'} style={{fontSize: FontSize.regular, marginBottom: 10}}>Is this the correct number?</Text>
         <Text style={{fontSize: 20, marginBottom: 15}}>{`${code} ${phone}`}</Text>
         <View style={{flexDirection: 'row', gap: 10, justifyContent: 'flex-end'}}>
           <TouchableOpacity onPress={ router.back } style={{padding: 15}}>
-            <DefaultText style={{color: brandColors.green[theme],fontSize: 17,fontFamily: 'HelveticaBold'}}>Edit</DefaultText>
+            <DefaultText style={{color: brandColors.green[theme],fontSize: FontSize.heading,fontFamily: 'HelveticaBold'}}>Edit</DefaultText>
           </TouchableOpacity>
           <TouchableOpacity style={{padding: 15}} onPress={() => router.replace({pathname: `/(auth)/[phoneNo]`, params: {phoneNo: `${code}${phone}`}})}>
-            <DefaultText style={{color: brandColors.green[theme],fontSize: 17, fontFamily: 'HelveticaBold'}}>Yes</DefaultText>
+            <DefaultText style={{color: brandColors.green[theme],fontSize: FontSize.heading, fontFamily: 'HelveticaBold'}}>Yes</DefaultText>
           </TouchableOpacity>
         </View>
       </View>

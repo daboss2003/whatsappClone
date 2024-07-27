@@ -1,8 +1,8 @@
 import { useLocalSearchParams, Link } from 'expo-router'
 import { View, Text } from '../../components/Themed'
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import {Text as DefaultText, StyleSheet, useColorScheme, View as DefaultView, Platform, Modal, Alert, TouchableOpacity, ActivityIndicator} from 'react-native'
-import { brandColors } from '../../constants/Colors'
+import { FontSize, brandColors } from '../../constants/Colors'
 import {
   CodeField,
   Cursor,
@@ -28,7 +28,6 @@ export default function VerifyOTP() {
   const [value, setValue] = useState('');
   const [verification, setVerification] = useState(null);
   const [isLoding, setIsloading] = useState(false)
-  const recapchaVerifier = useRef(null);
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
@@ -37,8 +36,10 @@ export default function VerifyOTP() {
 
 
   useEffect(() => {
+    if (!phoneNo) return
+    console.log(phoneNo)
     sendCode()
-  },[])
+  }, [phoneNo]);
 
   useEffect(() => {
     if (value.length === 6) {
@@ -48,12 +49,14 @@ export default function VerifyOTP() {
 
   async function sendCode() {
     try {
+      setOpenModal(false)
       setIsloading(true)
       const confirmation = await auth().signInWithPhoneNumber(phoneNo);
       setVerification(confirmation);
       Alert.alert('Success', 'Verification code has been sent to your phone.')
     }
-    catch(error){
+    catch (error) {
+      console.log(error)
       Alert.alert('Failed to send verification code.', error.message);
     }
     finally {
@@ -77,15 +80,17 @@ export default function VerifyOTP() {
   }
 
   if (isLoding) {
-    <View style={{justifyContent: 'center'}}>
+    return (
+      <View style={{justifyContent: 'center'}}>
       <ActivityIndicator size={60} style={{marginBottom: 20}} />
       <Text style={{fontSize: 18, textAlign: 'center'}}>Verifying...</Text>
     </View>
+    )
   }
  
   return (
     <View>
-      <Text type={'regular'} style={{fontSize: 15, textAlign: 'center', letterSpacing: 1,lineHeight: 27}}>
+      <Text type={'regular'} full={true} style={{fontSize: FontSize.regular, textAlign: 'center', letterSpacing: 1,lineHeight: 27}}>
        Waiting to automatically detect an SMS sent to
         <Text>
           {` ${phoneNo}. `}
@@ -140,7 +145,7 @@ export default function VerifyOTP() {
               <Text style={{ fontSize: 22, textAlign: 'center', lineHeight: 32, marginBottom: 15 }}>
                 Didn't receive a verification code?
               </Text>
-              <Text type={'regular'} style={{ fontSize: 16, textAlign: 'center', lineHeight:  25, marginBottom: 15 }}>
+              <Text full={true} type={'regular'} style={{ fontSize: FontSize.regular, textAlign: 'center', lineHeight:  25, marginBottom: 15 }}>
                 Please check your SMS messages before requesting another code.
               </Text>
               <MyButton full={true} onPress={sendCode}>
@@ -174,7 +179,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 30,
     lineHeight: 38,
-    fontSize: 24,
+    fontSize: FontSize.heading,
     borderBottomWidth: 2,
     textAlign: 'center'
   },

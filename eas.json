@@ -8,16 +8,21 @@
       "distribution": "internal",
       "channel": "development",
       "env": {
-        "EXPO_PUBLIC_AGORA_ID": "66619bef7fc3401db5d5f1db7b349dc1",
-        "EXPO_PUBLIC_PRIMARY_CERTIFICATE" : "7ee40e65395b4af299b7168c05a60d04"
+        "EXPO_PUBLIC_AGORA_ID": "1a5db5db68d04decb4d635b2128f24b0"
       }
     },
     "preview": {
       "distribution": "internal",
-      "channel": "preview"
+      "channel": "preview",
+      "env": {
+        "EXPO_PUBLIC_AGORA_ID": "1a5db5db68d04decb4d635b2128f24b0"
+      }
     },
     "production": {
-      "channel": "production"
+      "channel": "production",
+      "env": {
+        "EXPO_PUBLIC_AGORA_ID": "1a5db5db68d04decb4d635b2128f24b0"
+      }
     }
   },
   "submit": {

@@ -3,15 +3,13 @@ import React, { useState } from 'react'
 import Storage from '@react-native-firebase/storage'
 import FireStore from '@react-native-firebase/firestore'
 import * as ImagePicker from 'expo-image-picker'
-import { TouchableOpacity, Image, StyleSheet, KeyboardAvoidingView, Alert, Text as DefaultText, useColorScheme, View as DefaultView, TextInput, ActivityIndicator } from 'react-native'
-import MyButton from '../../components/MyButton'
-import { Formik } from 'formik';
+import { TouchableOpacity, Image, StyleSheet, useColorScheme, View as DefaultView, ActivityIndicator, Alert } from 'react-native'
 import * as Yup from 'yup';
 import { useRouter } from 'expo-router'
-import Colors,{ brandColors } from '../../constants/Colors'
+import { FontSize, brandColors } from '../../constants/Colors'
 import { useAuth } from '../../hooks/useAuth'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
+import Form from '../../components/Form'
 
 
 const UserNAmeSchema = Yup.object().shape({
@@ -23,8 +21,8 @@ export default function Index() {
   const [uploading, setUploading] = useState(false)
   const router = useRouter()
   const theme = useColorScheme() ?? 'light'
-  const [inputBorderWidth, setInputBorderWidth] = useState(1)
-  const { currentUser } = useAuth()
+  const { currentUser, connected, userInfo } = useAuth()
+  
  
 
   const pickImage = async () => {
@@ -51,7 +49,12 @@ export default function Index() {
     }
   };
 
-  async function upload(userName) {
+  async function upload(value) {
+    if (!connected) {
+      Alert.alert('No Connection', 'check your internet connection')
+      return
+    } 
+    const {userName} = value
     setUploading(true)
     let url = ''
     if (image) {
@@ -66,10 +69,10 @@ export default function Index() {
         username: userName,
         imageUrl: url,
         createdAt: FireStore.FieldValue.serverTimestamp(),
-        phoneNo: currentUser._user.phoneNumber
+        phoneNo: currentUser.phoneNumber
       });
       setUploading(false)
-      router.replace('/(tabs)');
+      router.replace('/(app)');
     }
     catch (err) {
       console.log(err)
@@ -85,20 +88,26 @@ export default function Index() {
   }
 
   if (uploading) {
-    <View>
-      <Text>Initializing...</Text>
-      <Text type={'regular'}>Please wait a moment</Text>
+    return (
       <View>
-        <Image source={require('../../assets/images/welcome.png')} width={'90%'} height={'40%'} style={{marginVertical: 15}} />
+        <Text>Initializing...</Text>
+        <Text type={'regular'}>Please wait a moment</Text>
+        <View>
+          <Image source={require('../../assets/images/welcome.png')} style={{marginVertical: 15, width: '90%', height: '40%'}} />
+        </View>
+        <ActivityIndicator size={20} color={brandColors.green[theme]} />
       </View>
-      <ActivityIndicator size={40} color={brandColors.green[theme]} />
-    </View>
+   )
+  }
+
+  if (userInfo !== null) {
+    router.replace('/(app)')
   }
   
   if (!uploading) {
     return (
     <View>
-      <Text style={{lineHeight: 24, fontSize: 15, textAlign: 'center', marginTop: -15}} type={'regular'}>Please provide your name and an optional profile photo</Text>
+      <Text style={{lineHeight: 24, fontSize: FontSize.regular, textAlign: 'center', marginTop: -15}} type={'regular'}>Please provide your name and an optional profile photo</Text>
       <TouchableOpacity style={{ ...styles.imagePicker, backgroundColor: theme === 'light' ? '#ddd' : '#999' }} onPress={pickImage}>
         {image
           ?
@@ -107,41 +116,9 @@ export default function Index() {
           <MaterialCommunityIcons name="camera-plus" size={45} color="#444" />  
         }
       </TouchableOpacity>
-       <Formik
-        initialValues={{ userName: '' }}
-        onSubmit={values => upload(values.userName)}
-        validationSchema={UserNAmeSchema}
-        >
-        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-          <KeyboardAvoidingView style={{ flex: 1, width: '100%', alignItems: 'center' }}>
-            <DefaultView style={styles.inputContainer}>
-              <DefaultView style={{ alignItems: 'center',borderColor: brandColors.green[theme],  borderBottomWidth: inputBorderWidth, gap: 6, flexBasis: '90%', flexDirection: 'row'}}>
-                <TextInput
-                onChangeText={handleChange('userName')}
-                cursorColor={brandColors.green[theme]}
-                onBlur={() => {
-                  handleBlur('userName')
-                  setInputBorderWidth(1)
-                  }
-                }
-                value={values.userName}
-                style={{ ...styles.input, color: brandColors[theme] }}
-                placeholder='username'
-                keyboardType="default"
-                onFocus={() => setInputBorderWidth(2)}
-                />
-                <Text type={'regular'}>{25 - values.userName.length}</Text>
-              </DefaultView>
-              <Entypo name="emoji-happy" size={24} color={Colors[theme].regularText} />
-            </DefaultView>
-            {errors.userName && touched.userName ? 
-              <DefaultText style={{fontSize: 14, color: 'red', marginVertical: 10, textAlign: 'center'}}>{ errors.userName}</DefaultText>
-            : ''}
-              
-              <DefaultView style={{flex: 1}}></DefaultView>
-              <MyButton onPress={handleSubmit}>Next</MyButton>
-          </KeyboardAvoidingView>
-        )}</Formik>
+        <Form schema={UserNAmeSchema} onSubmitForm={upload} max={25} buttonText={'Next'} greenType={'green'} style={{ flex: 1, width: '100%', alignItems: 'center' }} object={{field: 'userName', value: ''}}>
+          <DefaultView style={{flex: 1}}></DefaultView>
+       </Form>
     </View>
   )
 }
@@ -157,15 +134,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
     
-  },
-  input: {
-    flexBasis: '85%'
-  },
-  inputContainer: {
-    gap: 5,
-    width: '95%',
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center', 
   }
 })
