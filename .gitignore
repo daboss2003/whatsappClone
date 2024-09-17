@@ -40,3 +40,5 @@ android/
 # Local Netlify folder
 .netlify
 mobile-chat-58d8b-firebase-adminsdk-52gjz-cc0f322412.json
+GoogleService-Info.plist
+google-services.json
